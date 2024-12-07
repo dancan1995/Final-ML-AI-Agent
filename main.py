@@ -216,5 +216,4 @@ def format_phq9_results():
     return results_message
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=10000)  # Change to 10000 for Render's expected port
+    app.run(host="0.0.0.0", port=5000)  # Correct host for deployment
