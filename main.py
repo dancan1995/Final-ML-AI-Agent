@@ -5,6 +5,7 @@ import openai
 from nltk.tokenize import sent_tokenize
 from transformers import pipeline
 from sentence_transformers import SentenceTransformer, util
+from flask import send_file
 
 # Load environment variables
 load_dotenv()
@@ -27,10 +28,16 @@ similarity_model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
 phq9_rubric = [
     "Little interest or pleasure in doing things.",
     "Feeling down, depressed, or hopeless.",
-    "Feeling tired or having little energy"
+    "Feeling tired or having little energy.",
+    "Poor appetite or overeating.",
+    "Trouble falling or staying asleep, or sleeping too much.",
+    "Feeling bad about yourself — or that you are a failure or have let yourself or your family down.",
+    "Trouble concentrating on things, such as reading the newspaper or watching television.",
+    "Moving or speaking so slowly that other people could have noticed?  Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual.",
+    "Thoughts that you would be better off dead or of hurting yourself in some way."
 ]
 
-# Scoring rubric in the background
+# Scoring rubric in the backgroun
 phq9_scores = {question: None for question in phq9_rubric}
 
 def detect_negation_with_gpt(user_input, rubric_question):
@@ -77,7 +84,7 @@ def update_phq9_scores_with_similarity(user_input):
     """
     sentences = sent_tokenize(user_input.lower().strip())
 
-    threshold = 0.55  # Similarity threshold
+    threshold = 0.60  # Similarity threshold
     matched_questions = {}  # To store matched rubric questions and their scores
 
     # Step 1: Match each sentence to rubric questions
@@ -186,6 +193,15 @@ def get_response():
     # Only return the AI's conversational response
     return jsonify({"message": gpt_response})
 
+@app.route('/download-results')
+def download_results():
+    """Serve the PHQ-9 results file for download."""
+    results_file_path = "phq9_results.txt"
+    if os.path.exists(results_file_path):
+        return send_file(results_file_path, as_attachment=True)
+    else:
+        return "File not found.", 404
+
 def format_phq9_results():
     """Prepare PHQ-9 results as a conversational message."""
     questions = list(phq9_scores.keys())
@@ -213,7 +229,15 @@ def format_phq9_results():
         interpretation = "Severe depression."
 
     results_message += f"\nTotal PHQ-9 Score: {total_score}\nRecommendation: {interpretation}"
-    return results_message
+    #return results_message
+    # Create a downloadable file
+    results_file_path = "phq9_results.txt"
+    with open(results_file_path, "w") as file:
+        file.write(results_message)
+
+    # Return the results message with a download link
+    download_link = f'<a href="/download-results" target="_blank">Download your assessment results</a>'
+    return f"{results_message}\n\n{download_link}"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)  # Correct host for deployment
