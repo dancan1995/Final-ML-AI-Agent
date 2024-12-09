@@ -70,7 +70,7 @@ pip install -r requirements.txt
 ### Clone the repository:
 Clone the repository to your local machine using Git:
 ```bash
-`git clone https://github.com/dancan1995/AI_Therapist.git`
+`https://github.com/dancan1995/Final-ML-AI-Agent.git`
 ```
 ### Navigate to the project directory:
 ```bash
