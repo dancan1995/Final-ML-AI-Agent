@@ -27,14 +27,7 @@ similarity_model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
 # PHQ-9 rubric template
 phq9_rubric = [
     "Little interest or pleasure in doing things.",
-    "Feeling down, depressed, or hopeless.",
-    "Feeling tired or having little energy.",
-    "Poor appetite or overeating.",
-    "Trouble falling or staying asleep, or sleeping too much.",
-    "Feeling bad about yourself — or that you are a failure or have let yourself or your family down.",
-    "Trouble concentrating on things, such as reading the newspaper or watching television.",
-    "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual.",
-    "Thoughts that you would be better off dead or of hurting yourself in some way."
+    "Feeling down, depressed, or hopeless."
 ]
 
 # Scoring rubric in the background
@@ -46,7 +39,7 @@ history_file = 'conversation_history.json'
 self_evaluation_file = 'self_evaluation.json'
 
 # Default similarity threshold
-similarity_threshold = 0.60
+similarity_threshold = 0.56
 
 # Initialize files if not present
 for file in [feedback_file, history_file, self_evaluation_file]:
