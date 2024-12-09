@@ -129,7 +129,7 @@ We welcome contributions! If you'd like to contribute to the project, follow the
 2. **Clone your fork** locally:
 
 ```bash
-git clone https://github.com/your-username/AI_Therapist.git
+git clone https://github.com/your-username/Final-ML-AI-Agent.git
 ```
 
 3. **Create a new branch** for your feature or fix:
